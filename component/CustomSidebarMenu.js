@@ -36,6 +36,11 @@ export default class CustomSidebarMenu extends Component {
         ];
     }
 
+    _signOutAsync = async () => {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate(MainScreen);
+    };
+
     render() {
         return (
             <View style={styles.sideMenuContainer}>
@@ -61,7 +66,7 @@ export default class CustomSidebarMenu extends Component {
                             }}
                             key={key}>
                             <View style={{marginRight: 10, marginLeft: 20}}>
-                                <Icon name={item.navOptionThumb} size={25} />
+                                <Icon name={item.navOptionThumb} size={25}/>
                             </View>
                             <Text
                                 style={{
@@ -78,7 +83,6 @@ export default class CustomSidebarMenu extends Component {
                     ))}
                 </View>
                 <View>
-
                     <TouchableOpacity onPress={
                         this._signOutAsync
                     }>
@@ -90,11 +94,6 @@ export default class CustomSidebarMenu extends Component {
             </View>
         );
     }
-
-    _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate(MainScreen);
-    };
 }
 const styles = StyleSheet.create({
     sideMenuContainer: {
