@@ -25,6 +25,7 @@ export default class SignInScreen extends Component {
     _onChangeTextUser = (text) => this.setState({text, username: text})
     _onChangeTextPassword = (text) => this.setState({text, username: text})
     _signInAsync = async () => {
+
         await AsyncStorage.setItem('userToken', 'abc')
         this.props.navigation.navigate(DetailScreen)
         this.refs.addModal.showModal()
@@ -37,6 +38,7 @@ export default class SignInScreen extends Component {
         console.disableYellowBox = true;
         return (
             <View style={styles.container}>
+                    <PopUpMoDal ref={'addModal'}/>
                 <ImageBackground source={require('../image/backgroud-login.png')}
                                  style={styles.imageBack}>
                     <Text style={styles.appName}>
@@ -79,9 +81,8 @@ export default class SignInScreen extends Component {
                         </Text>
                     </Text>
                 </TouchableOpacity>
-                <PopUpMoDal ref={'addModal'}
-                            parentFlatList={this}/>
             </View>
+
         );
     }
 

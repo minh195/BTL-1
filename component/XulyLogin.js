@@ -5,7 +5,6 @@ import {
 import {
     createAppContainer
 } from 'react-navigation'
-//Components
 import SignInScreen from '../screens/LoginScreen'
 import DrawerNavigatorExample from './DrawerNav';
 
@@ -14,13 +13,12 @@ const StackNav = createStackNavigator({
         screen: SignInScreen,
         navigationOptions: {
             header: null,
-            headerTransparent: true
         }
     },
     DetailScreen: {
         screen: DrawerNavigatorExample,
         navigationOptions: {
-            header:null,
+            header: null,
         },
     },
     initialRouteName: 'DetailScreen',

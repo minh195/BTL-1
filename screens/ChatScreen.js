@@ -12,7 +12,7 @@ import {
     AsyncStorage
 } from 'react-native'
 import {MainScreen} from "../screenNames";
-//import PopUpMoDal from "../component/PopUpMoDal";
+import PopUpMoDal from "../component/PopUpMoDal";
 export default class ChatScreen extends Component {
 
     constructor(props) {
@@ -92,6 +92,7 @@ export default class ChatScreen extends Component {
         let {items, item, item1} = this.state;
         return (
             <View style={styles.container}>
+                <PopUpMoDal ref={'addModal'}/>
                 <View style={styles.header}>
                     <ImageBackground source={require('../image/backgroud-headerbar.png')}
                                      style={{width: '100%', height: 60}}
