@@ -7,15 +7,15 @@ import {
     Image,
     Text,
     TouchableOpacity,
-    AsyncStorage
 } from 'react-native';
-import {MainScreen} from "../screenNames";
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {DrawerActions} from 'react-navigation-drawer';
+import PopUpLogOut from "./PopUpLogOut";
+import {MainScreen} from "../screenNames";
 
 export default class CustomSidebarMenu extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         //Setting up the Main Top Large Image of the Custom Sidebar
         this.proileImage =
             'https://ih1.redbubble.net/image.467903495.2798/flat,750x,075,f-pad,750x1000,f8f8f8.jpg';
@@ -37,8 +37,11 @@ export default class CustomSidebarMenu extends Component {
     }
 
     _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate(MainScreen);
+        this.props.navigation.dispatch(DrawerActions.toggleDrawer());
+        this.refs.addModal1.showModal()
+
+        // await AsyncStorage.clear();
+        // this.props.navigation.navigate(MainScreen);
     };
 
     render() {
@@ -91,6 +94,7 @@ export default class CustomSidebarMenu extends Component {
                               name='sign-out'/>
                     </TouchableOpacity>
                 </View>
+                <PopUpLogOut ref={'addModal1'}/>
             </View>
         );
     }

@@ -3,14 +3,17 @@ import {
     StyleSheet,
     Text,
     Image,
+    Platform,
     Dimensions,
     View,
     TouchableOpacity,
     Modal,
+    AsyncStorage
 } from 'react-native';
+import {MainScreen} from "../screenNames";
 
 let screen = Dimensions.get('window');
-export default class PopUpModal extends Component {
+export default class PopUpLogOut extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,43 +28,42 @@ export default class PopUpModal extends Component {
     showModal = () => {
         this.setModalVisible(true)
     }
+    _handleDisablePopUp = () => {
+        this.setModalVisible(!this.state.modalVisible);
+    }
+    _handleLogOut = async () => {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate(MainScreen);
+    }
 
     render() {
+        const {navigation} = this.props
         return (
             <Modal
-                ref={"myModal"}
+                ref={"myModal1"}
                 transparent={true}
                 visible={this.state.modalVisible}
-                animated={true}
-            >
-                <View style={styles.containerPopUp}>
+                presentationStyle={"formSheet"}>
+                <View
+                    style={styles.containerPopUp}>
                     <View style={styles.topImage}>
-                        <View style={styles.popUpImageBack}>
-                            <Image source={require('../image/popUp.png')}
-                                   style={styles.popUpImage}/>
-                        </View>
+                        <Image source={require('../image/see-you.jpg')}
+                               style={styles.popUpImage}/>
                         <Text style={styles.textWelcom}>
-                            Welcom to PayLah!
-                        </Text>
-                        <Text style={styles.textIntro}>
-                            Here's a quick overview to get you started
+                            Bạn có muốn đăng xuất?
                         </Text>
                         <TouchableOpacity
                             style={styles.buttonNext}
-                            onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                            }}>
+                            onPress={this._handleLogOut}>
                             <Text style={styles.textNext}>
-                                LET'S GO
+                                Đồng ý
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.buttonSkip}
-                            onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                            }}>
+                            onPress={this._handleDisablePopUp}>
                             <Text style={styles.textSkip}>
-                                SKIP
+                                Hủy bỏ
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -73,33 +75,30 @@ export default class PopUpModal extends Component {
 const styles = StyleSheet.create({
     containerPopUp: {
         flex: 1,
-        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: Platform.OS === 'ios' ? 30 : 20,
         shadowRadius: 10,
-        marginLeft: 30,
-        marginRight: 30,
-        marginTop: 100,
-        marginBottom: 100,
-        backgroundColor: 'white',
-        borderRadius: 20
+        width: screen.width - 90,
+        height: 450,
+        marginLeft: 40,
+        marginRight: 40,
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: 'white'
     },
     popUpImage: {
         width: 120,
         height: 120,
+        borderRadius: 45
     },
     topImage: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    popUpImageBack: {
-        backgroundColor: '#F8F8F7',
-        width: 120,
-        height: 120,
-        borderRadius: 45,
-    },
     buttonNext: {
+        marginTop: 30,
         backgroundColor: '#F65973',
         width: screen.width - 140,
         height: 40,
@@ -122,7 +121,6 @@ const styles = StyleSheet.create({
     },
     textWelcom: {
         fontSize: 24,
-        fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 40
     },

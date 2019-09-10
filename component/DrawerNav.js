@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {
     View,
     Dimensions,
-    Image,
-    TouchableOpacity,
     StyleSheet
 } from 'react-native';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import ChatScreen from '../screens/ChatScreen';
 import RoomChatScreen from '../screens/RoomChatScreen';
 import SignInScreen from "../screens/LoginScreen";
+import PopUpLogOut from "./PopUpLogOut";
 //Import Custom Sidebar
 import CustomSidebarMenu from './CustomSidebarMenu';
 
@@ -17,20 +16,17 @@ global.currentScreenIndex = 0;
 
 //Navigation Drawer Structure for all screens
 class NavigationDrawerStructure extends Component {
+    constructor(props) {
+        super(props)
+    }
+
     toggleDrawer = () => {
-        //Props to open/close the drawer
         this.props.navigationProps.toggleDrawer();
     };
 
     render() {
         return (
             <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-                    <Image
-                        source={require('../image/drawer.png')}
-                        style={styles.avatarImage}
-                    />
-                </TouchableOpacity>
             </View>
         );
     }
@@ -48,9 +44,9 @@ const DrawerNavigatorExample = createDrawerNavigator(
         },
         NavScreen3: {
             screen: SignInScreen,
-            navigationOptions: {
-                header: null,
-            }
+        },
+        NavScreen4: {
+            screen: PopUpLogOut,
         }
     },
     {
