@@ -41,7 +41,6 @@ export default class PopUpModal extends Component {
                 position='center'
                 backdrop={true}
                 onClosed={() => {
-                    // alert("Modal closed");
                 }}
 
                 transparent={false}
