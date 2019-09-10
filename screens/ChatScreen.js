@@ -12,7 +12,7 @@ import {
     AsyncStorage
 } from 'react-native'
 import {MainScreen} from "../screenNames";
-import PopUpMoDal from "../component/PopUpMoDal";
+//import PopUpMoDal from "../component/PopUpMoDal";
 export default class ChatScreen extends Component {
 
     constructor(props) {
@@ -27,7 +27,6 @@ export default class ChatScreen extends Component {
     }
 
     addItem(value) {
-        this.refs.addModal.showAddModal()
         let {items} = this.state;
         // Give convert our item to an object then push to our current items (array)
         let item = {
@@ -41,14 +40,15 @@ export default class ChatScreen extends Component {
         Keyboard.dismiss()
         this.submitAndClear()
     }
-
+    _
     submitAndClear = () => {
         this.setState({
             text: ''
         })
     }
-    renderItem = ({item, index}) => {
+    _onChangeText=(text)=> this.setState({text, item: text})
 
+    renderItem = ({item, index}) => {
         let {id1, key1, label} = item;
         return (
             <View style={styles.item}>
@@ -82,7 +82,10 @@ export default class ChatScreen extends Component {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
-
+    _signOutAsync = async () => {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate(MainScreen);
+    };
     render() {
         const {navigation} = this.props
         console.disableYellowBox = true;
@@ -134,9 +137,9 @@ export default class ChatScreen extends Component {
                         <TextInput
                             style={styles.textInput}
                             placeholder={'Type a massage...'}
-                            onChangeText={(text) => this.setState({text, item: text})}
+                            onChangeText={this._onChangeText}
                             value={this.state.text}
-                            onSubmitEditing={() => this.addItem(item)}
+                            //onSubmitEditing={() => this.addItem(item)}
                         />
                     </View>
                     <View>
@@ -147,14 +150,9 @@ export default class ChatScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <PopUpMoDal ref={'addModal'} parentFlatList={this} />
             </View>
         )
     }
-    _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate(MainScreen);
-    };
 }
 
 const styles = StyleSheet.create({

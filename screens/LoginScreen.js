@@ -4,14 +4,14 @@ import {
     Text,
     View,
     TextInput,
-    TouchableHighlight,
     Image,
     ImageBackground,
     AsyncStorage,
-    ActivityIndicator, TouchableOpacity
+    TouchableOpacity
 } from 'react-native';
 import {DetailScreen} from '../screenNames';
 import PopUpMoDal from '../component/PopUpMoDal';
+
 export default class SignInScreen extends Component {
 
     constructor(props) {
@@ -21,12 +21,27 @@ export default class SignInScreen extends Component {
             password: '',
         }
     }
+
+    _onChangeTextUser = (text) => this.setState({text, username: text})
+    _onChangeTextPassword = (text) => this.setState({text, username: text})
+    _signInAsync = async () => {
+        await AsyncStorage.setItem('userToken', 'abc')
+        this.props.navigation.navigate(DetailScreen)
+        this.refs.addModal.showModal()
+    };
+    _signUp = () => {
+        this.refs.addModal.showModal()
+    }
+
     render() {
         console.disableYellowBox = true;
         return (
             <View style={styles.container}>
-                <ImageBackground source={require('../image/backgroud-login.png')} style={styles.imageBack}>
-                    <Text style={styles.appName}>Chat demo</Text>
+                <ImageBackground source={require('../image/backgroud-login.png')}
+                                 style={styles.imageBack}>
+                    <Text style={styles.appName}>
+                        Chat demo
+                    </Text>
                 </ImageBackground>
                 <View style={styles.inputContainer}>
                     <Image style={styles.inputIcon}
@@ -35,10 +50,8 @@ export default class SignInScreen extends Component {
                                placeholder="Email"
                                keyboardType="email-address"
                                underlineColorAndroid='transparent'
-                               onChangeText={(text) => this.setState({text, username: text})}
-                    />
+                               onChangeText={this._onChangeTextUser}/>
                 </View>
-
                 <View style={styles.inputContainer}>
                     <Image style={styles.inputIcon}
                            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjTVFrqMbHP46lpXssJd7eY_wjtl2dB9IaqfU-iqwOtTqJqbYDRA'}}/>
@@ -46,37 +59,32 @@ export default class SignInScreen extends Component {
                                placeholder="Password"
                                secureTextEntry={true}
                                underlineColorAndroid='transparent'
-                               onChangeText={(text) => this.setState({text, password: text})}
-                    />
+                               onChangeText={this._onChangeTextPassword}/>
                 </View>
-
                 <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}
-                                    onPress={this._signInAsync}>
-                    <Text style={styles.loginText}>Login</Text>
+                                  onPress={this._signInAsync}>
+                    <Text style={styles.loginText}>
+                        Login
+                    </Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.buttonContainer}
-                    //onPress={() => this.onClickListener('restore_password')}
-                >
+                <TouchableOpacity style={styles.buttonContainer}>
                     <Text style={styles.forgotText}>FORGOT PASSWORD?</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.buttonContainer}
-                    onPress={this._signUp}
-                >
-                    <Text style={styles.signInText}>Don't have an account?<Text style={{color: "blue"}}> Sign Up</Text></Text>
+                                  onPress={this._signUp}>
+                    <Text style={styles.signInText}>
+                        Don't have an account?
+                        <Text style={{color: "blue"}}>
+                            Sign Up
+                        </Text>
+                    </Text>
                 </TouchableOpacity>
-                <PopUpMoDal ref={'addModal'} parentFlatList={this} />
+                <PopUpMoDal ref={'addModal'}
+                            parentFlatList={this}/>
             </View>
         );
     }
-    _signInAsync = async () => {
-        await AsyncStorage.setItem('userToken', 'abc')
-        this.props.navigation.navigate(DetailScreen)
-    };
-    _signUp=()=>{
-        this.refs.addModal.showAddModal()
-    }
+
 }
 
 const styles = StyleSheet.create({
