@@ -18,7 +18,6 @@ export default class PopUpModal extends Component {
             modalVisible: false,
         };
     }
-
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
     }
