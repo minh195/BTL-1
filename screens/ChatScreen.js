@@ -9,21 +9,35 @@ import {
     Image,
     Keyboard,
     ImageBackground,
-    AsyncStorage
+    AsyncStorage,
+    ActivityIndicator
 } from 'react-native'
 import {MainScreen} from "../screenNames";
 import PopUpMoDal from "../component/PopUpMoDal";
-export default class ChatScreen extends Component {
 
+export default class ChatScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             items: [{
-                key: '1', id: 1, label: 'I am ok thanks for asking and you? ' +
-                    'It is been a long time since we have seen each other.'
+                type: 1,
+                key: '1',
+                id: 1,
+                label: `I'm ok thanks for asking and you? It's been a long time since we've seen each other.`,
+                receiveMes: ''
             }],
-            text: ''
+            text: '',
+            loading: true,
+            error: false,
+            posts: '',
         }
+    }
+
+    _onChangeText = (text) => this.setState({text, item: text})
+    submitAndClear = () => {
+        this.setState({
+            text: ''
+        })
     }
 
     addItem(value) {
@@ -32,40 +46,104 @@ export default class ChatScreen extends Component {
         let item = {
             key: 'aKey',// give it a unique key
             id: items[items.length - 1].id++, // get the last id of our items and increment it(i.e +1)
+            type: 1,
             label: value
         }
-
         items.push(item); // add our new item
         // set our items to the state to update it
         Keyboard.dismiss()
         this.submitAndClear()
+        this.HandleReceiveMessage(value)
     }
-    _
-    submitAndClear = () => {
-        this.setState({
-            text: ''
-        })
-    }
-    _onChangeText=(text)=> this.setState({text, item: text})
 
-    renderItem = ({item, index}) => {
-        let {id1, key1, label} = item;
-        return (
-            <View style={styles.item}>
-                <View>
-                    <Text style={styles.textMessage}>
-                        {label}
-                        <Text style={styles.timeMessage}>{"\n"}12:05 PM</Text><Text style={styles.seenIcon}> ✓</Text>
+    HandleReceiveMessage = async (value) => {
+        let txt = value
+        let language = "en"
+        let {items} = this.state;
+        try {
+            const response = await fetch(`http://ghuntur.com/simsim.php?lc=${language}&deviceId=&bad0=&txt=${txt}`,
+                {
+                    method: 'GET',
+                })
+            let posts = await response.text()//with any line with space
+            let item = {
+                type: 2,
+                key: 'aKey',// give it a unique key
+                id: items[items.length - 1].id++, // get the last id of our items and increment it(i.e +1)
+                receiveMes: posts.trim()//remove line space
+            }
+            items.push(item); // add our new item
+            this.setState({loading: false, posts})
+        } catch (e) {
+            this.setState({loading: false, error: true})
+        }
+    }
+    renderItem = ({item, index, title}) => {
+        let {id, key, label, receiveMes, type} = item;
+        const {error} = this.state
+        let {loading} = this.state
+        let time= new Date().getHours()
+        // if (loading) {
+        //     return (
+        //         <View style={{backgroundColor:'black',height:40, width:40}}>
+        //             <ActivityIndicator animating={true}/>
+        //         </View>
+        //     )
+        // }
+        if (error) {
+            return (
+                <View style={styles.center}>
+                    <Text>
+                        Failed to load message!
                     </Text>
                 </View>
-                <Image
-                    style={styles.avatarUser}
-                    source={require('../image/myAvatar.png')}
-                />
-            </View>
-        )
-    }
+            )
+        }
+        if (type == 2) {
+            if (loading) {
+                return (
+                    <View style={{backgroundColor: 'black', height: 40, width: 40}}>
+                        <ActivityIndicator animating={true}/>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.item1}>
+                        <Image
+                            style={styles.avatarUser1}
+                            source={require('../image/avatar-user.png')}
+                        />
+                        <Text style={styles.textMessage1}>
+                            {label}
+                            {receiveMes}
+                            <Text style={styles.timeMessage1}>{"\n"}01:22 PM</Text>
+                        </Text>
+                    </View>
+                )
+            }
+        } else {
 
+            return (
+                <View style={styles.item}>
+                    <View>
+                        <Text style={styles.textMessage}>
+                            {label}
+                            {receiveMes}
+                            <Text style={styles.timeMessage}>
+                                {"\n"}12:23 PM
+                            </Text>
+                            <Text style={styles.seenIcon}> ✓</Text>
+                        </Text>
+                    </View>
+                    <Image
+                        style={styles.avatarUser}
+                        source={require('../image/myAvatar.png')}
+                    />
+                </View>
+            )
+        }
+
+    }
 
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener(
@@ -82,25 +160,26 @@ export default class ChatScreen extends Component {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
+
     _signOutAsync = async () => {
         await AsyncStorage.clear();
         this.props.navigation.navigate(MainScreen);
     };
+
     render() {
         const {navigation} = this.props
         console.disableYellowBox = true;
-        let {items, item, item1} = this.state;
+        let {items, item} = this.state;
+
+        //Loading and show error
         return (
             <View style={styles.container}>
                 <PopUpMoDal ref={'addModal'}/>
                 <View style={styles.header}>
                     <ImageBackground source={require('../image/backgroud-headerbar.png')}
-                                     style={{width: '100%', height: 60}}
-                    >
+                                     style={{width: '100%', height: 60}}>
                         <View style={styles.elementHeader}>
-                            <TouchableOpacity onPress={
-                                this._signOutAsync
-                            }>
+                            <TouchableOpacity onPress={this._signOutAsync}>
                                 <Image source={require('../image/go-back.png')}
                                        style={{width: 20, height: 20}}/>
                             </TouchableOpacity>
@@ -125,7 +204,7 @@ export default class ChatScreen extends Component {
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.reactIcon}>
-                        < TouchableOpacity>
+                        <TouchableOpacity>
                             <Image style={{width: 20, height: 20, margin: 5}}
                                    source={require('../image/add-icon.png')}/>
                         </TouchableOpacity>
@@ -140,7 +219,7 @@ export default class ChatScreen extends Component {
                             placeholder={'Type a massage...'}
                             onChangeText={this._onChangeText}
                             value={this.state.text}
-                            //onSubmitEditing={() => this.addItem(item)}
+                            onSubmitEditing={() => this.addItem(item)}
                         />
                     </View>
                     <View>
@@ -181,13 +260,12 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         fontSize: 20,
         padding: 15,
-    }
-    ,
+    },
     content: {
         flex: 1,
         flexDirection: 'column',
         width: '100%',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-start',
     },
     footer: {
         display: 'flex',
@@ -203,12 +281,14 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         justifyContent: 'flex-end'
-    }, avatarUser: {
+    },
+    avatarUser: {
         width: 50,
         height: 50,
         overflow: 'hidden',
         borderRadius: 40,
-    }, textMessage: {
+    },
+    textMessage: {
         margin: 2,
         padding: 10,
         color: 'white',
@@ -219,7 +299,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         fontSize: 16,
         width: 200
-    }, seenIcon: {},
+    },
+    seenIcon: {},
     timeMessage: {
         fontSize: 14,
         color: '#D7D7D7'
@@ -230,12 +311,42 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10
-    }, textInput: {
+    },
+    textInput: {
         height: 50,
         width: 200
     },
     send_icon: {
         width: 100,
         height: 60,
+    },
+    item1: {
+        flex: 1,
+        flexDirection: 'row',
+        margin: 10,
+        borderRadius: 10,
+        justifyContent: 'flex-start'
+    },
+    avatarUser1: {
+        width: 50,
+        height: 50,
+        overflow: 'hidden',
+        borderRadius: 40,
+    },
+    textMessage1: {
+        margin: 2,
+        padding: 10,
+        color: 'black',
+        backgroundColor: '#FFFFFF',
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: 'hidden',
+        fontSize: 16,
+        width: 200
+    },
+    timeMessage1: {
+        fontSize: 14,
+        color: '#D7D7D7'
     },
 })
