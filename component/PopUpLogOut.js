@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -8,14 +8,12 @@ import {
     View,
     TouchableOpacity,
     Modal,
-    AsyncStorage
-} from 'react-native';
-import {MainScreen} from "../screenNames";
+} from 'react-native'
 
 let screen = Dimensions.get('window');
 export default class PopUpLogOut extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             modalVisible: false,
         };
@@ -31,9 +29,8 @@ export default class PopUpLogOut extends Component {
     _handleDisablePopUp = () => {
         this.setModalVisible(!this.state.modalVisible);
     }
-    _handleLogOut = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate(MainScreen);
+    _handleLogOut = () => {
+        this.props.logout()
     }
 
     render() {
@@ -42,30 +39,30 @@ export default class PopUpLogOut extends Component {
             <Modal
                 ref={"myModal1"}
                 transparent={true}
-                visible={this.state.modalVisible}
-                presentationStyle={"formSheet"}>
-                <View
-                    style={styles.containerPopUp}>
-                    <View style={styles.topImage}>
-                        <Image source={require('../image/see-you.jpg')}
-                               style={styles.popUpImage}/>
-                        <Text style={styles.textWelcom}>
-                            Bạn có muốn đăng xuất?
-                        </Text>
-                        <TouchableOpacity
-                            style={styles.buttonNext}
-                            onPress={this._handleLogOut}>
-                            <Text style={styles.textNext}>
-                                Đồng ý
+                visible={this.state.modalVisible}>
+                <View style={styles.popUpTransparent}>
+                    <View style={styles.containerPopUp}>
+                        <View style={styles.topImage}>
+                            <Image source={require('../image/see-you.jpg')}
+                                   style={styles.popUpImage}/>
+                            <Text style={styles.textWelcom}>
+                                Bạn có muốn đăng xuất?
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonSkip}
-                            onPress={this._handleDisablePopUp}>
-                            <Text style={styles.textSkip}>
-                                Hủy bỏ
-                            </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonNext}
+                                onPress={this._handleLogOut}>
+                                <Text style={styles.textNext}>
+                                    Đồng ý
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonSkip}
+                                onPress={this._handleDisablePopUp}>
+                                <Text style={styles.textSkip}>
+                                    Hủy bỏ
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </Modal>
@@ -80,12 +77,17 @@ const styles = StyleSheet.create({
         borderRadius: Platform.OS === 'ios' ? 30 : 20,
         shadowRadius: 10,
         width: screen.width - 90,
-        height: 450,
+        height: 500,
         marginLeft: 40,
         marginRight: 40,
         marginTop: 150,
         marginBottom: 150,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+    },
+    popUpTransparent: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(52, 52, 52, 0.5)'
     },
     popUpImage: {
         width: 120,

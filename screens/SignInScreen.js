@@ -16,7 +16,7 @@ export default class SignInScreen extends Component {
 
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             username: '',
             password: '',
         }
@@ -25,11 +25,10 @@ export default class SignInScreen extends Component {
     _onChangeTextUser = (text) => this.setState({text, username: text})
     _onChangeTextPassword = (text) => this.setState({text, username: text})
     _signInAsync = async () => {
-
         await AsyncStorage.setItem('userToken', 'abc')
         this.props.navigation.navigate(DetailScreen)
         this.refs.addModal.showModal()
-    };
+    }
     _signUp = () => {
         this.refs.addModal.showModal()
     }
@@ -38,7 +37,7 @@ export default class SignInScreen extends Component {
         console.disableYellowBox = true;
         return (
             <View style={styles.container}>
-                    <PopUpMoDal ref={'addModal'}/>
+                <PopUpMoDal ref={'addModal'}/>
                 <ImageBackground source={require('../image/backgroud-login.png')}
                                  style={styles.imageBack}>
                     <Text style={styles.appName}>
@@ -76,7 +75,7 @@ export default class SignInScreen extends Component {
                                   onPress={this._signUp}>
                     <Text style={styles.signInText}>
                         Don't have an account?
-                        <Text style={{color: "blue"}}>
+                        <Text style={styles.textSignUp}>
                             Sign Up
                         </Text>
                     </Text>
@@ -85,7 +84,6 @@ export default class SignInScreen extends Component {
 
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -93,8 +91,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    imageBack: {
+    }, textSignUp: {
+        color: "blue"
+    }, imageBack: {
         flex: 1,
         marginBottom: 20,
         height: '80%',
@@ -121,20 +120,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderColor: 'black', borderWidth: 1
-    },
-    inputs: {
+    }, inputs: {
         height: 45,
         marginLeft: 16,
         borderBottomColor: '#FFFFFF',
         flex: 1,
-    },
-    inputIcon: {
+    }, inputIcon: {
         width: 16,
         height: 16,
         marginLeft: 15,
         justifyContent: 'center'
-    },
-    buttonContainer: {
+    }, buttonContainer: {
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -142,20 +138,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         width: 250,
         borderRadius: 30,
-    },
-    forgotText: {
+    }, forgotText: {
         fontSize: 13,
         color: "hotpink"
-    },
-    loginButton: {
+    }, loginButton: {
         backgroundColor: "#CB5D9A",
-    },
-    loginText: {
+    }, loginText: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16
-    },
-    signInText: {
+    }, signInText: {
         fontSize: 12
     }
 });
