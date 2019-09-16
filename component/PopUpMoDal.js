@@ -25,6 +25,9 @@ export default class PopUpModal extends Component {
     showModal = () => {
         this.setModalVisible(true)
     }
+    hideModal = () => {
+        this.setModalVisible(!this.state.modalVisible);
+    }
 
     render() {
         return (
@@ -32,38 +35,35 @@ export default class PopUpModal extends Component {
                 ref={"myModal"}
                 transparent={true}
                 visible={this.state.modalVisible}
-                animated={true}
-            >
-                <View style={styles.containerPopUp}>
-                    <View style={styles.topImage}>
-                        <View style={styles.popUpImageBack}>
-                            <Image source={require('../image/popUp.png')}
-                                   style={styles.popUpImage}/>
+                animated={true}>
+                <View style={styles.popUpTransparent}>
+                    <View style={styles.containerPopUp}>
+                        <View style={styles.topImage}>
+                            <View style={styles.popUpImageBack}>
+                                <Image source={require('../image/popUp.png')}
+                                       style={styles.popUpImage}/>
+                            </View>
+                            <Text style={styles.textWelcom}>
+                                Welcom to PayLah!
+                            </Text>
+                            <Text style={styles.textIntro}>
+                                Here's a quick overview to get you started
+                            </Text>
+                            <TouchableOpacity
+                                style={styles.buttonNext}
+                                onPress={this.hideModal}>
+                                <Text style={styles.textNext}>
+                                    LET'S GO
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonSkip}
+                                onPress={this.hideModal}>
+                                <Text style={styles.textSkip}>
+                                    SKIP
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-                        <Text style={styles.textWelcom}>
-                            Welcom to PayLah!
-                        </Text>
-                        <Text style={styles.textIntro}>
-                            Here's a quick overview to get you started
-                        </Text>
-                        <TouchableOpacity
-                            style={styles.buttonNext}
-                            onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                            }}>
-                            <Text style={styles.textNext}>
-                                LET'S GO
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonSkip}
-                            onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                            }}>
-                            <Text style={styles.textSkip}>
-                                SKIP
-                            </Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -82,51 +82,46 @@ const styles = StyleSheet.create({
         marginTop: 100,
         marginBottom: 100,
         backgroundColor: 'white',
-        borderRadius: 20
-    },
-    popUpImage: {
+        borderRadius: 20,
+    }, popUpTransparent: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(52, 52, 52, 0.5)'
+    }, popUpImage: {
         width: 120,
         height: 120,
-    },
-    topImage: {
+    }, topImage: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    popUpImageBack: {
+    }, popUpImageBack: {
         backgroundColor: '#F8F8F7',
         width: 120,
         height: 120,
         borderRadius: 45,
-    },
-    buttonNext: {
+    }, buttonNext: {
         backgroundColor: '#F65973',
         width: screen.width - 140,
         height: 40,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    buttonSkip: {},
-    textNext: {
+    }, textNext: {
         margin: 10,
         color: 'white',
         fontSize: 24,
         fontWeight: 'bold'
-    },
-    textSkip: {
+    }, textSkip: {
         margin: 10,
         color: '#F65973',
         fontSize: 24,
         fontWeight: 'bold'
-    },
-    textWelcom: {
+    }, textWelcom: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 40
-    },
-    textIntro: {
+    }, textIntro: {
         fontSize: 20,
         textAlign: 'center',
         padding: 15,

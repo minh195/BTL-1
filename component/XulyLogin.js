@@ -1,11 +1,6 @@
-import React, {Component} from 'react';
-import {
-    createStackNavigator
-} from 'react-navigation-stack'
-import {
-    createAppContainer
-} from 'react-navigation'
-import SignInScreen from '../screens/LoginScreen'
+import {createStackNavigator} from 'react-navigation-stack'
+import {createAppContainer} from 'react-navigation'
+import SignInScreen from '../screens/SignInScreen'
 import DrawerNavigatorExample from './DrawerNav';
 
 const StackNav = createStackNavigator({
